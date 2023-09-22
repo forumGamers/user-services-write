@@ -9,9 +9,10 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { format, utcToZonedTime } from "date-fns-tz";
 import routes from "./routes";
-import Constant from "../src/constant/global";
+import Constant from "./constant/global";
 import notFound from "./routes/notFound";
 import errorHandler from "./middlewares/errorHandler";
+import AppError from "./base/error";
 
 class App {
   public app: Application;
@@ -36,7 +37,12 @@ class App {
           if (whiteList.indexOf(requestOrigin as string) !== -1) {
             callback(null, true);
           } else {
-            callback(new Error(`Not allowed by CORS for URL ${requestOrigin}`));
+            callback(
+              new AppError({
+                message: `Not allowed by CORS for URL ${requestOrigin}`,
+                statusCode: 403,
+              })
+            );
           }
         },
       })
