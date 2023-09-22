@@ -25,10 +25,7 @@ export = {
       username: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: {
-          name: "username unique",
-          msg: "username is already use",
-        },
+        unique: true,
         validate: {
           notEmpty: {
             msg: "username is required",
@@ -46,10 +43,7 @@ export = {
       },
       email: {
         type: Sequelize.STRING,
-        unique: {
-          name: "email unique",
-          msg: "email is already use",
-        },
+        unique: true,
         allowNull: false,
         validate: {
           notEmpty: {

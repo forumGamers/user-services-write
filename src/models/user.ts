@@ -55,10 +55,7 @@ export default class User extends Model<UserAttributes, any> {
         username: {
           type: DataTypes.STRING,
           allowNull: false,
-          unique: {
-            name: "username unique",
-            msg: "username is already use",
-          },
+          unique: true,
           validate: {
             notEmpty: {
               msg: "username is required",
@@ -76,10 +73,7 @@ export default class User extends Model<UserAttributes, any> {
         },
         email: {
           type: DataTypes.STRING,
-          unique: {
-            name: "email unique",
-            msg: "email is already use",
-          },
+          unique: true,
           allowNull: false,
           validate: {
             notEmpty: {

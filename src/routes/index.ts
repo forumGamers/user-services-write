@@ -1,9 +1,9 @@
 import BaseRoutes from "../base/router";
-import user from "./user";
+import auth from "./auth";
 
 class Router extends BaseRoutes {
   routes(): void {
-    this.router.use("/users", user);
+    this.router.use("/auth", auth);
   }
 }
 
