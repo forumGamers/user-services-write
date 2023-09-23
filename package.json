@@ -9,7 +9,9 @@
     "dev": "nodemon src/bin/www.ts --exec ts-node src/bin/www.ts",
     "build": "tsc",
     "serve": "npm run build && npm start",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "docker-dev-up": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker-dev-down": "docker-compose -f docker-compose.dev.yml down"
   },
   "lint-staged": {
     "*.{ts}": [
@@ -34,6 +36,7 @@
   },
   "homepage": "https://github.com/forumGamers/user-services-write#readme",
   "dependencies": {
+    "@types/amqplib": "^0.10.1",
     "@types/bcryptjs": "^2.4.4",
     "@types/compression": "^1.7.3",
     "@types/cors": "^2.8.14",
@@ -48,6 +51,7 @@
     "@types/sequelize": "^4.28.15",
     "@types/uuid": "^9.0.4",
     "@types/yup": "^0.32.0",
+    "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

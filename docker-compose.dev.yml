@@ -1,0 +1,13 @@
+version: '3'
+services:
+  broker:
+    image: rabbitmq:management
+    container_name: user-services-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    volumes:
+      - "./data/rabbitmq-data:/var/lib/rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user" 
+      RABBITMQ_DEFAULT_PASS: "password"
