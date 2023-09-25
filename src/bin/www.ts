@@ -1,7 +1,11 @@
+import { config } from "dotenv";
+
+config();
+
 import app from "..";
 import broker from "../broker";
 
-async function startApp() {
+(async function () {
   try {
     await broker.connect();
     await broker.declareExchangeAndQueue();
@@ -12,6 +16,4 @@ async function startApp() {
     //send email
     throw err;
   }
-}
-
-startApp();
+})();
