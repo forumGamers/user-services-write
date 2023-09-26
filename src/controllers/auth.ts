@@ -2,12 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import validator from "../validations/auth";
 import { Db, User, Token } from "../models";
 import response from "../middlewares/response";
-import broker from "../broker";
+import userPublisher from "../broker/user";
+import tokenPublisher from "../broker/token";
 import AppError from "../base/error";
 import encryption from "../helpers/encryption";
 import jwt from "../helpers/jwt";
 import { QueryTypes } from "sequelize";
-import { UserAttributes } from "../models/user";
+import { UserAttributes } from "../interfaces/user";
 import { AdminAttributes } from "../models/admin";
 
 export default class Controller {
@@ -25,7 +26,7 @@ export default class Controller {
       } = await validator.registerValidation(req.body);
 
       const user = await User.create({ fullname, username, email, password });
-      await broker.sendNewUser({
+      await userPublisher.sendNewUser({
         id: user.UUID,
         fullname: user.fullname,
         username: user.username,
@@ -91,7 +92,7 @@ export default class Controller {
         as,
       });
 
-      await broker.sendNewToken({
+      await tokenPublisher.sendNewToken({
         access_token,
         user_id: token.userId,
         as,

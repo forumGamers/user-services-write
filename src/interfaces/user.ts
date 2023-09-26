@@ -1,4 +1,21 @@
-export default interface UserBroker {
+export interface UserAttributes {
+  fullname: string;
+  username: string;
+  UUID: string;
+  email: string;
+  password: string;
+  isVerified: boolean;
+  bio: string;
+  imageUrl: string;
+  imageId: string;
+  backgroundUrl: string;
+  backgroundId: string;
+  status: "active" | "nonActive";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UserBroker {
   id: string;
   fullname: string;
   username: string;
@@ -23,12 +40,4 @@ export default interface UserBroker {
     | "Marketing"
     | null;
   role?: "Supervisor" | "Manager" | "Staff" | null;
-}
-
-export interface TokenBroker {
-  access_token: string;
-  user_id: string;
-  as: "User" | "Admin" | "Seller";
-  created_at: Date;
-  updated_at: Date;
 }

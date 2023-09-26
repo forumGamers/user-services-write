@@ -1,12 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-
-export interface TokenAttributes {
-  access_token: string;
-  as: "User" | "Admin" | "Seller";
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { TokenAttributes } from "../interfaces/token";
 
 export default class Token extends Model<TokenAttributes, any> {
   public access_token!: string;

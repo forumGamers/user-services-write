@@ -3,12 +3,14 @@ import { config } from "dotenv";
 config();
 
 import app from "..";
-import broker from "../broker";
+import Broker from "../broker";
 
 (async function () {
   try {
+    const broker = new Broker();
     await broker.connect();
     await broker.declareExchangeAndQueue();
+
     const port = process.env.PORT ?? 3001;
 
     app.listen(port, () => console.log(`app listening on port ${port}`));

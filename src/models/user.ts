@@ -2,23 +2,7 @@ import { Sequelize, DataTypes, Model } from "sequelize";
 import { HookReturn } from "sequelize/types/hooks";
 import { v4 } from "uuid";
 import encryption from "../helpers/encryption";
-
-export interface UserAttributes {
-  fullname: string;
-  username: string;
-  UUID: string;
-  email: string;
-  password: string;
-  isVerified: boolean;
-  bio: string;
-  imageUrl: string;
-  imageId: string;
-  backgroundUrl: string;
-  backgroundId: string;
-  status: "active" | "nonActive";
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { UserAttributes } from "../interfaces/user";
 
 export default class User extends Model<UserAttributes, any> {
   public fullname!: string;

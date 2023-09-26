@@ -1,8 +1,7 @@
 import { Connection, Channel, connect } from "amqplib";
 import AppError from "../base/error";
-import UserBroker, { TokenBroker } from "../interfaces/broker-model";
 
-abstract class RabbitMQProperty {
+export default class RabbitMQProperty {
   protected connection!: Connection;
   protected channel!: Channel;
   protected connectionString =
@@ -14,9 +13,7 @@ abstract class RabbitMQProperty {
 
   protected userExchange = "User-Exchanges";
   protected exchanges: string[] = [this.userExchange];
-}
 
-class RabbitMQ extends RabbitMQProperty {
   public async connect() {
     try {
       this.connection = await connect(`${this.connectionString}?heartbeat=10`);
@@ -25,10 +22,6 @@ class RabbitMQ extends RabbitMQProperty {
     } catch (err) {
       throw new AppError({ message: err as any, statusCode: 502 });
     }
-  }
-
-  constructor() {
-    super();
   }
 
   public async declareExchangeAndQueue() {
@@ -63,20 +56,4 @@ class RabbitMQ extends RabbitMQProperty {
       throw new AppError({ message: err as any, statusCode: 501 });
     }
   }
-
-  public async sendNewUser(user: UserBroker) {
-    return this.channel.sendToQueue(
-      this.newUserQueue,
-      Buffer.from(JSON.stringify(user))
-    );
-  }
-
-  public async sendNewToken(token: TokenBroker) {
-    return this.channel.sendToQueue(
-      this.loginUserQueue,
-      Buffer.from(JSON.stringify(token))
-    );
-  }
 }
-
-export default new RabbitMQ();
