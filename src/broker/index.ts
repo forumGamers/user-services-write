@@ -26,19 +26,17 @@ export default class RabbitMQProperty {
 
   public async declareExchangeAndQueue() {
     try {
-      for (const exchange of this.exchanges) {
+      for (const exchange of this.exchanges)
         await this.channel.assertExchange(exchange, "direct", {
           durable: true,
           autoDelete: false,
         });
-      }
 
-      for (const queue of [...this.userQueues]) {
+      for (const queue of [...this.userQueues])
         await this.channel.assertQueue(queue, {
           durable: true,
           autoDelete: false,
         });
-      }
 
       for (const exchange of this.exchanges) {
         let queues: string[] = [];

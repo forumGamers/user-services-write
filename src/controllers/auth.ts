@@ -10,6 +10,8 @@ import jwt from "../helpers/jwt";
 import { QueryTypes } from "sequelize";
 import { UserAttributes } from "../interfaces/user";
 import { AdminAttributes } from "../models/admin";
+import { OAuth2Client, TokenPayload } from "google-auth-library";
+import { v4 } from "uuid";
 
 export default class Controller {
   public static async register(
@@ -101,6 +103,89 @@ export default class Controller {
       });
 
       response({ res, code: 200, message: "success", data: { access_token } });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async googleLogin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { google_token } = req.headers;
+
+      const client = new OAuth2Client(
+        process.env.GOOGLE_OAUTH_CLIENTID,
+        process.env.GOOGLE_OAUTH_CLIENT_SECRET
+      );
+
+      const ticket = await client.verifyIdToken({
+        idToken: google_token as string,
+        audience: process.env.GOOGLE_OAUTH_CLIENTID,
+      });
+
+      const {
+        given_name,
+        family_name,
+        email,
+      } = ticket.getPayload() as TokenPayload;
+
+      const [user, created] = await User.findOrCreate({
+        where: { email },
+        defaults: {
+          email,
+          password: "GOOGLE LOGIN",
+          username: family_name ? `${given_name} ${family_name}` : given_name,
+          fullname: family_name ? `${given_name} ${family_name}` : given_name,
+          isVerified: true,
+          UUID: v4(),
+        },
+        hooks: false,
+      });
+
+      const access_token = jwt.createToken({
+        UUID: user.UUID,
+        loggedAs: "User",
+      });
+
+      const token = await Token.create({
+        access_token,
+        role: "User",
+        userId: user.UUID,
+      });
+
+      if (created)
+        await userPublisher.sendNewUser({
+          id: user.UUID,
+          fullname: user.fullname,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          is_verified: user.isVerified,
+          bio: user.bio,
+          image_url: user.imageUrl,
+          image_id: user.imageId,
+          background_url: user.backgroundUrl,
+          background_id: user.backgroundId,
+          status: user.status,
+          created_at: user.createdAt,
+          updated_at: user.updatedAt,
+          store_id: "",
+          division: null,
+          role: null,
+        });
+
+      await tokenPublisher.sendNewToken({
+        access_token,
+        user_id: token.userId,
+        as: "User",
+        created_at: token.createdAt,
+        updated_at: token.updatedAt,
+      });
+
+      response({ res, code: 200, data: access_token });
     } catch (err) {
       next(err);
     }
