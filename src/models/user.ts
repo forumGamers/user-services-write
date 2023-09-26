@@ -12,7 +12,9 @@ export interface UserAttributes {
   isVerified: boolean;
   bio: string;
   imageUrl: string;
+  imageId: string;
   backgroundUrl: string;
+  backgroundId: string;
   status: "active" | "nonActive";
   createdAt: Date;
   updatedAt: Date;
@@ -27,7 +29,9 @@ export default class User extends Model<UserAttributes, any> {
   public isVerified!: boolean;
   public bio!: string;
   public imageUrl!: string;
+  public imageId!: string;
   public backgroundUrl!: string;
+  public backgroundId!: string;
   public status!: "active" | "nonActive";
   public createdAt!: Date;
   public updatedAt!: Date;
@@ -117,8 +121,16 @@ export default class User extends Model<UserAttributes, any> {
           type: DataTypes.STRING,
           defaultValue: "",
         },
+        imageId: {
+          type: DataTypes.STRING,
+          defaultValue: "",
+        },
 
         backgroundUrl: {
+          type: DataTypes.STRING,
+          defaultValue: "",
+        },
+        backgroundId: {
           type: DataTypes.STRING,
           defaultValue: "",
         },

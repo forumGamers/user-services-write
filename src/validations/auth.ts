@@ -1,6 +1,6 @@
 import BaseValidation from "../base/validation";
 import * as yup from "yup";
-import { RegisterInput } from "../interfaces/auth";
+import { LoginInput, RegisterInput } from "../interfaces/auth";
 
 class AuthValidation extends BaseValidation {
   constructor() {
@@ -30,6 +30,23 @@ class AuthValidation extends BaseValidation {
           "password is not match with confirm password",
           (val) => val.password === val.confirmPassword
         ),
+      data
+    );
+  }
+
+  public async loginValidate(data: any) {
+    return await this.validate<LoginInput>(
+      yup.object().shape({
+        email: yup
+          .string()
+          .required("email is required")
+          .email("invalid email format"),
+        password: yup.string().required("password is required"),
+        as: yup
+          .string()
+          .default("User")
+          .oneOf(["User", "Admin", "Seller"], "Invalid account type"),
+      }),
       data
     );
   }

@@ -85,7 +85,15 @@ export = {
         type: Sequelize.STRING,
         defaultValue: "",
       },
+      imageId: {
+        type: Sequelize.STRING,
+        defaultValue: "",
+      },
       backgroundUrl: {
+        type: Sequelize.STRING,
+        defaultValue: "",
+      },
+      backgroundId: {
         type: Sequelize.STRING,
         defaultValue: "",
       },

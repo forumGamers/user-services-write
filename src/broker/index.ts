@@ -1,6 +1,6 @@
 import { Connection, Channel, connect } from "amqplib";
 import AppError from "../base/error";
-import UserBroker from "../interfaces/broker-model";
+import UserBroker, { TokenBroker } from "../interfaces/broker-model";
 
 abstract class RabbitMQProperty {
   protected connection!: Connection;
@@ -9,7 +9,8 @@ abstract class RabbitMQProperty {
     (process.env.RABBITMQURL as string) ||
     "amqp://user:password@localhost:5673";
   protected newUserQueue = "New-User-Queue";
-  protected userQueues: string[] = [this.newUserQueue];
+  protected loginUserQueue = "Login-User-Queue";
+  protected userQueues: string[] = [this.newUserQueue, this.loginUserQueue];
 
   protected userExchange = "User-Exchanges";
   protected exchanges: string[] = [this.userExchange];
@@ -67,6 +68,13 @@ class RabbitMQ extends RabbitMQProperty {
     return this.channel.sendToQueue(
       this.newUserQueue,
       Buffer.from(JSON.stringify(user))
+    );
+  }
+
+  public async sendNewToken(token: TokenBroker) {
+    return this.channel.sendToQueue(
+      this.loginUserQueue,
+      Buffer.from(JSON.stringify(token))
     );
   }
 }

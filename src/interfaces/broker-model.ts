@@ -7,7 +7,9 @@ export default interface UserBroker {
   is_verified: boolean;
   bio: string;
   image_url: string;
+  image_id: string;
   background_url: string;
+  background_id: string;
   status: "active" | "nonActive";
   created_at: Date;
   updated_at: Date;
@@ -21,4 +23,12 @@ export default interface UserBroker {
     | "Marketing"
     | null;
   role?: "Supervisor" | "Manager" | "Staff" | null;
+}
+
+export interface TokenBroker {
+  access_token: string;
+  user_id: string;
+  as: "User" | "Admin" | "Seller";
+  created_at: Date;
+  updated_at: Date;
 }
