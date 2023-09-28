@@ -40,4 +40,6 @@ export interface UserBroker {
     | "Marketing"
     | null;
   role?: "Supervisor" | "Manager" | "Staff" | null;
+  following: string[];
+  followers: string[];
 }

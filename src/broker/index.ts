@@ -1,7 +1,9 @@
 import { Connection, Channel, connect } from "amqplib";
 import AppError from "../base/error";
+import { UserBroker } from "../interfaces/user";
+import { TokenBroker } from "../interfaces/token";
 
-export default class RabbitMQProperty {
+class RabbitMQProperty {
   protected connection!: Connection;
   protected channel!: Channel;
   protected connectionString =
@@ -54,4 +56,20 @@ export default class RabbitMQProperty {
       throw new AppError({ message: err as any, statusCode: 501 });
     }
   }
+
+  public async sendNewUser(user: UserBroker) {
+    return this.channel.sendToQueue(
+      this.newUserQueue,
+      Buffer.from(JSON.stringify(user))
+    );
+  }
+
+  public async sendNewToken(token: TokenBroker) {
+    return this.channel.sendToQueue(
+      this.loginUserQueue,
+      Buffer.from(JSON.stringify(token))
+    );
+  }
 }
+
+export default new RabbitMQProperty();

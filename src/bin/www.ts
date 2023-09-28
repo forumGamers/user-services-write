@@ -3,11 +3,10 @@ import { config } from "dotenv";
 config();
 
 import app from "..";
-import Broker from "../broker";
+import broker from "../broker";
 
 (async function () {
   try {
-    const broker = new Broker();
     await broker.connect();
     await broker.declareExchangeAndQueue();
 

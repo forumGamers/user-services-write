@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import validator from "../validations/auth";
 import { Db, User, Token } from "../models";
 import response from "../middlewares/response";
-import userPublisher from "../broker/user";
-import tokenPublisher from "../broker/token";
+import broker from "../broker";
 import AppError from "../base/error";
 import encryption from "../helpers/encryption";
 import jwt from "../helpers/jwt";
@@ -18,14 +17,18 @@ export default class Controller {
   public static async register(
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) {
     try {
-      const { fullname, username, email, password } =
-        await validator.registerValidation(req.body);
+      const {
+        fullname,
+        username,
+        email,
+        password,
+      } = await validator.registerValidation(req.body);
 
       const user = await User.create({ fullname, username, email, password });
-      await userPublisher.sendNewUser({
+      await broker.sendNewUser({
         id: user.UUID,
         fullname: user.fullname,
         username: user.username,
@@ -43,6 +46,8 @@ export default class Controller {
         store_id: "",
         division: null,
         role: null,
+        followers: [],
+        following: [],
       });
 
       response({ code: 201, res, message: "Success Register" });
@@ -68,7 +73,7 @@ export default class Controller {
         {
           type: QueryTypes.SELECT,
           bind: [email],
-        },
+        }
       );
       if (!user || !encryption.compareEncryption(password, user.password))
         throw new AppError({ message: "invalid credentials", statusCode: 401 });
@@ -80,7 +85,7 @@ export default class Controller {
         as,
       });
 
-      await tokenPublisher.sendNewToken({
+      await broker.sendNewToken({
         access_token,
         user_id: token.userId,
         as,
@@ -97,14 +102,14 @@ export default class Controller {
   public static async googleLogin(
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) {
     try {
       const { google_token } = req.headers;
 
       const client = new OAuth2Client(
         process.env.GOOGLE_OAUTH_CLIENTID,
-        process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        process.env.GOOGLE_OAUTH_CLIENT_SECRET
       );
 
       const ticket = await client.verifyIdToken({
@@ -112,8 +117,11 @@ export default class Controller {
         audience: process.env.GOOGLE_OAUTH_CLIENTID,
       });
 
-      const { given_name, family_name, email } =
-        ticket.getPayload() as TokenPayload;
+      const {
+        given_name,
+        family_name,
+        email,
+      } = ticket.getPayload() as TokenPayload;
 
       const [user, created] = await User.findOrCreate({
         where: { email },
@@ -140,7 +148,7 @@ export default class Controller {
       });
 
       if (created)
-        await userPublisher.sendNewUser({
+        await broker.sendNewUser({
           id: user.UUID,
           fullname: user.fullname,
           username: user.username,
@@ -158,9 +166,11 @@ export default class Controller {
           store_id: "",
           division: null,
           role: null,
+          followers: [],
+          following: [],
         });
 
-      await tokenPublisher.sendNewToken({
+      await broker.sendNewToken({
         access_token,
         user_id: token.userId,
         as: "User",

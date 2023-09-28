@@ -5,7 +5,7 @@ import {
   UniqueConstraintError,
 } from "sequelize";
 import response from "./response";
-import { ApplicationError } from "../base/error";
+import AppError, { ApplicationError } from "../base/error";
 
 class ErrorHandling {
   public errorHandler(
@@ -16,10 +16,12 @@ class ErrorHandling {
       | ApplicationError,
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) {
-    let message = err.message ?? "Internal Server Error";
-    let code = (err as ApplicationError).statusCode ?? 500;
+    let message =
+      err instanceof AppError ? err.message : "Internal Server Error";
+    let code =
+      err instanceof AppError ? (err as ApplicationError).statusCode : 500;
 
     if (
       err instanceof ValidationError ||
