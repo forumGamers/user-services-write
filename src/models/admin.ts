@@ -1,18 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-
-export interface AdminAttributes {
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-  division:
-    | "Director"
-    | "Finance"
-    | "IT"
-    | "Third Party"
-    | "Customer Service"
-    | "Marketing";
-  role: "Supervisor" | "Manager" | "Staff";
-}
+import { AdminAttributes } from "../interfaces/admin";
 
 export default class Admin extends Model<AdminAttributes, any> {
   public userId!: string;

@@ -1,4 +1,5 @@
 import BaseRoutes from "../base/router";
+import authentication from "../middlewares/authentication";
 import auth from "./auth";
 
 class Router extends BaseRoutes {

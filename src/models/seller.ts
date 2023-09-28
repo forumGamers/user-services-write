@@ -1,12 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-
-export interface SellerAttributes {
-  createdAt: Date;
-  updatedAt: Date;
-
-  StoreId: string;
-  userId: string;
-}
+import { SellerAttributes } from "../interfaces/seller";
 
 export default class Seller extends Model<SellerAttributes, any> {
   createdAt!: Date;

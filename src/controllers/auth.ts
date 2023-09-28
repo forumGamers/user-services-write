@@ -9,9 +9,10 @@ import encryption from "../helpers/encryption";
 import jwt from "../helpers/jwt";
 import { QueryTypes } from "sequelize";
 import { UserAttributes } from "../interfaces/user";
-import { AdminAttributes } from "../models/admin";
+import { AdminAttributes } from "../interfaces/admin";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
 import { v4 } from "uuid";
+import Helper from "../helpers";
 
 export default class Controller {
   public static async register(
@@ -58,18 +59,7 @@ export default class Controller {
     try {
       const { email, password, as } = await validator.loginValidate(req.body);
 
-      let joinTable;
-      switch (as) {
-        case "Admin":
-          joinTable = "Admins";
-          break;
-        case "Seller":
-          joinTable = "Sellers";
-          break;
-        default:
-          joinTable = "Users";
-          break;
-      }
+      const joinTable = Helper.userStatus(as);
 
       let query = `SELECT * FROM "Users" u`;
       if (!!joinTable && joinTable !== "Users")

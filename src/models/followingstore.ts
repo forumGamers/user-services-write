@@ -1,12 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-
-export interface FollowingStoreAttributes {
-  userId: string;
-  target: string;
-
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { FollowingStoreAttributes } from "../interfaces/followingStore";
 
 export default class FollowingStores extends Model<
   FollowingStoreAttributes,
