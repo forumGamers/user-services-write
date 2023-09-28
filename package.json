@@ -9,7 +9,7 @@
     "dev": "nodemon src/bin/www.ts --exec ts-node src/bin/www.ts",
     "build": "tsc",
     "serve": "npm run build && npm start",
-    "format": "prettier --write \"src/**/*.ts\"",
+    "format": "prettier --write src/**/*.ts",
     "docker-dev-up": "docker-compose -f docker-compose.dev.yml up -d",
     "docker-dev-down": "docker-compose -f docker-compose.dev.yml down"
   },

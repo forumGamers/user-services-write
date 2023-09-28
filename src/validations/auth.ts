@@ -28,9 +28,9 @@ class AuthValidation extends BaseValidation {
         .test(
           "is same",
           "password is not match with confirm password",
-          (val) => val.password === val.confirmPassword
+          (val) => val.password === val.confirmPassword,
         ),
-      data
+      data,
     );
   }
 
@@ -47,7 +47,7 @@ class AuthValidation extends BaseValidation {
           .default("User")
           .oneOf(["User", "Admin", "Seller"], "Invalid account type"),
       }),
-      data
+      data,
     );
   }
 }

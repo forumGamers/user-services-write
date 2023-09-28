@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 export default interface IRoutes {
-    router:Router
+  router: Router;
 
-    routes():void
+  routes(): void;
 }

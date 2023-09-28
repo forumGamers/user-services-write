@@ -40,7 +40,7 @@ export default class Seller extends Model<SellerAttributes, any> {
           type: DataTypes.DATE,
         },
       },
-      { modelName: "Sellers", sequelize }
+      { modelName: "Sellers", sequelize },
     );
   }
 }

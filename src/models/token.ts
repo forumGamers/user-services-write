@@ -62,7 +62,7 @@ export default class Token extends Model<TokenAttributes, any> {
           type: DataTypes.DATE,
         },
       },
-      { sequelize, modelName: "Tokens" }
+      { sequelize, modelName: "Tokens" },
     );
   }
 }

@@ -9,7 +9,7 @@ class TokenPublisher extends RabbitMQProperty {
   public async sendNewToken(token: TokenBroker) {
     return this.channel.sendToQueue(
       this.loginUserQueue,
-      Buffer.from(JSON.stringify(token))
+      Buffer.from(JSON.stringify(token)),
     );
   }
 }

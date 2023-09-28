@@ -144,7 +144,7 @@ export default class User extends Model<UserAttributes, any> {
             user.password = encryption.hash(user.password);
           },
         },
-      }
+      },
     );
   }
 }

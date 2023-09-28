@@ -9,7 +9,7 @@ class UserPublisher extends RabbitMQProperty {
   public async sendNewUser(user: UserBroker) {
     return this.channel.sendToQueue(
       this.newUserQueue,
-      Buffer.from(JSON.stringify(user))
+      Buffer.from(JSON.stringify(user)),
     );
   }
 }

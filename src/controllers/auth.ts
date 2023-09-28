@@ -18,15 +18,11 @@ export default class Controller {
   public static async register(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
-      const {
-        fullname,
-        username,
-        email,
-        password,
-      } = await validator.registerValidation(req.body);
+      const { fullname, username, email, password } =
+        await validator.registerValidation(req.body);
 
       const user = await User.create({ fullname, username, email, password });
       await userPublisher.sendNewUser({
@@ -72,7 +68,7 @@ export default class Controller {
         {
           type: QueryTypes.SELECT,
           bind: [email],
-        }
+        },
       );
       if (!user || !encryption.compareEncryption(password, user.password))
         throw new AppError({ message: "invalid credentials", statusCode: 401 });
@@ -101,14 +97,14 @@ export default class Controller {
   public static async googleLogin(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const { google_token } = req.headers;
 
       const client = new OAuth2Client(
         process.env.GOOGLE_OAUTH_CLIENTID,
-        process.env.GOOGLE_OAUTH_CLIENT_SECRET
+        process.env.GOOGLE_OAUTH_CLIENT_SECRET,
       );
 
       const ticket = await client.verifyIdToken({
@@ -116,11 +112,8 @@ export default class Controller {
         audience: process.env.GOOGLE_OAUTH_CLIENTID,
       });
 
-      const {
-        given_name,
-        family_name,
-        email,
-      } = ticket.getPayload() as TokenPayload;
+      const { given_name, family_name, email } =
+        ticket.getPayload() as TokenPayload;
 
       const [user, created] = await User.findOrCreate({
         where: { email },

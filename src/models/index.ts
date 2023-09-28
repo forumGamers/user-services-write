@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "test") {
     config.test.database,
     config.test.username,
     config.test.password,
-    <Options>config.test
+    <Options>config.test,
   );
 } else if (
   process.env.NODE_ENV === "production" ||
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "test") {
     config.development.database,
     config.development.username,
     config.development.password,
-    <Options>config.development
+    <Options>config.development,
   );
 }
 
@@ -38,7 +38,7 @@ const model = [User, Admin, Seller, Token, FollowingStores, FollowingUsers];
 model.forEach((el) => el.initialize(sequelize));
 
 model.forEach((el) =>
-  el.associate({ User, Admin, Seller, Token, FollowingStores, FollowingUsers })
+  el.associate({ User, Admin, Seller, Token, FollowingStores, FollowingUsers }),
 );
 
 export {

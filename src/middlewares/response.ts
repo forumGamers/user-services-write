@@ -35,7 +35,7 @@ class ResponseHandler {
   }
   public async createResponse(
     payload: ResponsePayload,
-    detail?: ResponseDetail
+    detail?: ResponseDetail,
   ) {
     const { code, message, res, data } = payload;
     const response = this.baseResponse({ code, message, data });

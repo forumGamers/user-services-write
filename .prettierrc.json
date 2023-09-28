@@ -4,7 +4,7 @@
   "bracketSpacing": true,
   "arrowParens": "always",
   "semi": true,
-  "printWidth": 150,
+  "printWidth": 80,
   "useTabs": false,
   "trailingComma": "all",
   "bracketSameLine": true,

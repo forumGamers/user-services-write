@@ -15,13 +15,13 @@ export default abstract class BaseRoutes implements IRoutes {
   protected NotFoundRoutes(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): void {
     next(
       new AppError({
         message: `Cannot ${req.method} ${req.originalUrl}`,
         statusCode: 404,
-      })
+      }),
     );
   }
 }

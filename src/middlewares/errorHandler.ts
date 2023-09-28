@@ -16,7 +16,7 @@ class ErrorHandling {
       | ApplicationError,
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     let message = err.message ?? "Internal Server Error";
     let code = (err as ApplicationError).statusCode ?? 500;

@@ -24,7 +24,7 @@ class App {
     this.app.use(
       helmet({
         referrerPolicy: { policy: "same-origin" },
-      })
+      }),
     );
     this.app.use(
       cors({
@@ -37,25 +37,25 @@ class App {
               new AppError({
                 message: `Not allowed by CORS for URL ${requestOrigin}`,
                 statusCode: 403,
-              })
+              }),
             );
           }
         },
-      })
+      }),
     );
     morgan.token("date", () =>
       format(
         utcToZonedTime(new Date(), "Asia/Jakarta"),
-        "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
-      )
+        "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
+      ),
     );
     morgan.format(
       "production",
-      '[:date[Asia/Jakarta]] ":method :url" :status :res[content-length] - :response-time ms'
+      '[:date[Asia/Jakarta]] ":method :url" :status :res[content-length] - :response-time ms',
     );
     morgan.format(
       "dev",
-      '[:date[Asia/Jakarta]] ":method :url" :status :res[content-length] - :response-time ms'
+      '[:date[Asia/Jakarta]] ":method :url" :status :res[content-length] - :response-time ms',
     );
     this.app.use(morgan("combined"));
     this.app.use(express.static("public"));
@@ -66,7 +66,7 @@ class App {
         extended: true,
         limit: "50mb",
         parameterLimit: 100000000,
-      })
+      }),
     );
     this.app.disable("x-powered-by");
   }

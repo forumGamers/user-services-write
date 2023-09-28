@@ -52,7 +52,7 @@ export default class FollowingStores extends Model<
           type: DataTypes.DATE,
         },
       },
-      { sequelize, modelName: "FollowingStores" }
+      { sequelize, modelName: "FollowingStores" },
     );
   }
 }

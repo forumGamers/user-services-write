@@ -63,7 +63,7 @@ export default class Admin extends Model<AdminAttributes, any> {
           type: DataTypes.DATE,
         },
       },
-      { sequelize, modelName: "Admins" }
+      { sequelize, modelName: "Admins" },
     );
   }
 }

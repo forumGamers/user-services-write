@@ -53,7 +53,7 @@ export default class FollowingUsers extends Model<
           type: DataTypes.DATE,
         },
       },
-      { sequelize, modelName: "FollowingUsers" }
+      { sequelize, modelName: "FollowingUsers" },
     );
   }
 }
