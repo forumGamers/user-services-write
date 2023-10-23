@@ -18,6 +18,7 @@ class ErrorHandling {
     res: Response,
     next: NextFunction
   ) {
+    console.log({ err });
     let message =
       err instanceof AppError ? err.message : "Internal Server Error";
     let code =
@@ -30,20 +31,27 @@ class ErrorHandling {
     ) {
       code = 400;
       switch ((err as any).name) {
-        case "SequelizeUniqueConstraintError": {
-          if ((err as any).parent.constraint === "Users_email_key") {
-            message = "email is already use";
-          } else if ((err as any).parent.constraint === "Users_username_key") {
-            message = "username is already use";
-          } else {
-            message = (err as any).errors[0].message;
+        case "SequelizeUniqueConstraintError":
+          {
+            if ((err as any).parent.constraint === "Users_email_key") {
+              message = "email is already use";
+            } else if (
+              (err as any).parent.constraint === "Users_username_key"
+            ) {
+              message = "username is already use";
+            } else {
+              message = (err as any).errors[0].message;
+            }
           }
-        }
+          break;
         case "SequelizeValidationError": {
           message = (err as any).errors.join(", \n");
+          break;
         }
-        default:
+        default: {
           message = err.message;
+          break;
+        }
       }
     }
     const payload: any = {

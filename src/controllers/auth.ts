@@ -183,4 +183,48 @@ export default class Controller {
       next(err);
     }
   }
+
+  public static async generateForgetPasswordToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { email } = await validator.emailValidation(req.body);
+
+      const [user]: UserAttributes[] = await Db.query(
+        `SELECT * FROM "Users" u WHERE u.email = $1;`,
+        {
+          type: QueryTypes.SELECT,
+          bind: [email],
+        }
+      );
+
+      if (!user)
+        throw new AppError({ message: "data not found", statusCode: 404 });
+
+      const access_token = jwt.createToken({
+        UUID: user.UUID,
+        loggedAs: "User",
+      });
+
+      const token = await Token.create({
+        access_token,
+        userId: user.UUID,
+        as: "User",
+      });
+
+      await broker.sendNewToken({
+        access_token,
+        user_id: token.userId,
+        as: "User",
+        created_at: token.createdAt,
+        updated_at: token.updatedAt,
+      });
+
+      response({ res, code: 200, message: "success", data: access_token });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

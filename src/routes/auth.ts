@@ -6,7 +6,8 @@ class Routes extends BaseRoutes {
     this.router
       .post("/register", Controller.register)
       .post("/login", Controller.login)
-      .post("/google-login", Controller.googleLogin);
+      .post("/google-login", Controller.googleLogin)
+      .post('/forget-password',Controller.generateForgetPasswordToken);
   }
 }
 
