@@ -9,11 +9,8 @@ class Routes extends BaseRoutes {
       .post("/login", Controller.login)
       .post("/google-login", Controller.googleLogin)
       .post("/forget-password", Controller.generateForgetPasswordToken)
-      .patch(
-        "/change-forget-pass",
-        authentication,
-        Controller.changeForgetPass
-      );
+      .patch("/change-forget-pass", authentication, Controller.changeForgetPass)
+      .patch("/verify", Controller.verifyUser);
   }
 }
 

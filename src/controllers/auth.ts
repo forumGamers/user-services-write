@@ -269,9 +269,53 @@ export default class Controller {
       });
 
       await transaction.commit();
-      response({ res, code: 200, message: "success", data: access_token });
+      response({ res, code: 200, message: "success" });
     } catch (err) {
       await transaction.rollback();
+      next(err);
+    }
+  }
+
+  public static async verifyUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { token = "" } = req.query;
+
+      const { UUID } = jwt.verifyToken(token as string);
+
+      const user = await User.findOne({ where: { UUID } });
+      if (!user)
+        throw new AppError({ statusCode: 404, message: "data not found" });
+
+      await User.update({ isVerified: true }, { where: { UUID } });
+
+      await broker.sendUpdateUser({
+        id: user.UUID,
+        fullname: user.fullname,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        is_verified: true,
+        bio: user.bio,
+        image_url: user.imageUrl,
+        image_id: user.imageId,
+        background_url: user.backgroundUrl,
+        background_id: user.backgroundId,
+        status: user.status,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+        store_id: "",
+        division: null,
+        role: null,
+        followers: [],
+        following: [],
+      });
+
+      response({ res, code: 200, message: "success" });
+    } catch (err) {
       next(err);
     }
   }
