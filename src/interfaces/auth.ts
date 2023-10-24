@@ -11,3 +11,8 @@ export interface LoginInput {
   password: string;
   as: "User" | "Admin" | "Seller";
 }
+
+export interface ResetPasswordInput {
+  password: string;
+  confirmPassword: string;
+}

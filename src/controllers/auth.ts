@@ -227,4 +227,52 @@ export default class Controller {
       next(err);
     }
   }
+
+  public static async changeForgetPass(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const transaction = await Db.transaction();
+    try {
+      const { UUID } = req.user as UserAttributes;
+      const { access_token } = req.headers;
+
+      const { password } = await validator.resetPasswordValidation(req.body);
+
+      const [_, [user]] = await User.update(
+        { password },
+        { where: { UUID }, returning: true, transaction }
+      );
+      await Token.destroy({ where: { access_token }, transaction });
+
+      await broker.sendUpdateUser({
+        id: user.UUID,
+        fullname: user.fullname,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        is_verified: user.isVerified,
+        bio: user.bio,
+        image_url: user.imageUrl,
+        image_id: user.imageId,
+        background_url: user.backgroundUrl,
+        background_id: user.backgroundId,
+        status: user.status,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+        store_id: "",
+        division: null,
+        role: null,
+        followers: [],
+        following: [],
+      });
+
+      await transaction.commit();
+      response({ res, code: 200, message: "success", data: access_token });
+    } catch (err) {
+      await transaction.rollback();
+      next(err);
+    }
+  }
 }

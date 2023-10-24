@@ -1,6 +1,10 @@
 import BaseValidation from "../base/validation";
 import * as yup from "yup";
-import { LoginInput, RegisterInput } from "../interfaces/auth";
+import {
+  LoginInput,
+  RegisterInput,
+  ResetPasswordInput,
+} from "../interfaces/auth";
 
 class AuthValidation extends BaseValidation {
   constructor() {
@@ -17,6 +21,28 @@ class AuthValidation extends BaseValidation {
             .string()
             .required("email is required")
             .email("invalid email format"),
+          password: yup
+            .string()
+            .required("password is required")
+            .test((val) => this.passwordValidation(val)),
+          confirmPassword: yup
+            .string()
+            .required("confirm password is required"),
+        })
+        .test(
+          "is same",
+          "password is not match with confirm password",
+          (val) => val.password === val.confirmPassword
+        ),
+      data
+    );
+  }
+
+  public async resetPasswordValidation(data: any) {
+    return await this.validate<ResetPasswordInput>(
+      yup
+        .object()
+        .shape({
           password: yup
             .string()
             .required("password is required")

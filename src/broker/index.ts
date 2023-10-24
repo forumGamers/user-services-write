@@ -10,8 +10,13 @@ class RabbitMQProperty {
     (process.env.RABBITMQURL as string) ||
     "amqp://user:password@localhost:5673";
   protected newUserQueue = "New-User-Queue";
+  protected updateUserQueue = "Update-User-Queue";
   protected loginUserQueue = "Login-User-Queue";
-  protected userQueues: string[] = [this.newUserQueue, this.loginUserQueue];
+  protected userQueues: string[] = [
+    this.newUserQueue,
+    this.loginUserQueue,
+    this.updateUserQueue,
+  ];
 
   protected userExchange = "User-Exchanges";
   protected exchanges: string[] = [this.userExchange];
@@ -44,7 +49,7 @@ class RabbitMQProperty {
         let queues: string[] = [];
         switch (exchange) {
           case this.userExchange:
-            queues = [this.newUserQueue];
+            queues = [this.newUserQueue, this.updateUserQueue];
             break;
           default:
             break;
@@ -68,6 +73,13 @@ class RabbitMQProperty {
     return this.channel.sendToQueue(
       this.loginUserQueue,
       Buffer.from(JSON.stringify(token))
+    );
+  }
+
+  public async sendUpdateUser(user: UserBroker) {
+    return this.channel.sendToQueue(
+      this.updateUserQueue,
+      Buffer.from(JSON.stringify(user))
     );
   }
 }

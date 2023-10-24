@@ -53,7 +53,7 @@ class Auth {
     req: Request,
     loggedAs: "User" | "Admin" | "Seller",
     user: TokenAttributes &
-      (UserAttributes | AdminAttributes | SellerAttributes),
+      (UserAttributes | AdminAttributes | SellerAttributes)
   ) {
     req.user = {
       loggedAs,
@@ -68,7 +68,7 @@ class Auth {
       const payload = jwt.verifyToken(access_token);
       const user = await this.getUserData(
         this.generateQuery(payload.loggedAs),
-        access_token,
+        access_token
       );
       this.bindRequest(req, payload.loggedAs, user);
 
