@@ -50,7 +50,7 @@ export default class Controller {
         following: [],
       });
 
-      response({ code: 201, res, message: "Success Register" });
+      response({ code: 201, res, message: "Success Register", data: user });
     } catch (err) {
       next(err);
     }
