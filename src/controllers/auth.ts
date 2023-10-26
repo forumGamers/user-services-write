@@ -27,7 +27,14 @@ export default class Controller {
         password,
       } = await validator.registerValidation(req.body);
 
-      const user = await User.create({ fullname, username, email, password });
+      const user = await User.create({
+        fullname,
+        username,
+        email,
+        password,
+        UUID: v4(),
+      });
+
       await broker.sendNewUser({
         id: user.UUID,
         fullname: user.fullname,

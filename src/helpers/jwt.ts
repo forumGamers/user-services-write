@@ -14,7 +14,7 @@ class JWT {
 
   public createToken(
     data: { UUID: string; loggedAs: "User" | "Admin" | "Seller" },
-    options?: SignOptions,
+    options?: SignOptions
   ) {
     return sign({ ...data }, this.secret, options);
   }

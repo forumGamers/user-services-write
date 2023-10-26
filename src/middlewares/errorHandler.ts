@@ -18,7 +18,6 @@ class ErrorHandling {
     res: Response,
     next: NextFunction
   ) {
-    console.log({ err });
     let message =
       err instanceof AppError ? err.message : "Internal Server Error";
     let code =

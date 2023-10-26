@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { HookReturn } from "sequelize/types/hooks";
-import { v4 } from "uuid";
 import encryption from "../helpers/encryption";
 import { UserAttributes } from "../interfaces/user";
 
@@ -55,7 +54,6 @@ export default class User extends Model<UserAttributes, any> {
         },
         UUID: {
           type: DataTypes.UUID,
-          defaultValue: v4(),
           primaryKey: true,
           allowNull: false,
         },
@@ -140,11 +138,10 @@ export default class User extends Model<UserAttributes, any> {
         modelName: "Users",
         hooks: {
           beforeCreate: (user, options): HookReturn => {
-            user.UUID = v4();
             user.password = encryption.hash(user.password);
           },
         },
-      },
+      }
     );
   }
 }
