@@ -97,4 +97,6 @@ export default abstract class GlobalConstant {
   };
 
   public static uploadDirr = "./uploads";
+
+  public static forbiddenChar = /[;'"\\]/g;
 }

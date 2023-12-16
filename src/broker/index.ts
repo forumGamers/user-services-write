@@ -15,12 +15,14 @@ class RabbitMQProperty {
   protected loginUserQueue = "Login-User-Queue";
   protected userChangeProfile = "User-Change-Profile";
   protected userChangeBackground = "User-Change-Background"
+  protected userChangeInfo = "User-Change-Info"
   protected userQueues: string[] = [
     this.newUserQueue,
     this.loginUserQueue,
     this.updateUserQueue,
     this.userChangeProfile,
-    this.userChangeBackground
+    this.userChangeBackground,
+    this.userChangeInfo
   ];
 
   protected userExchange = "User-Exchanges";

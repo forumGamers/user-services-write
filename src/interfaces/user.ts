@@ -58,8 +58,19 @@ export interface UserController {
     res: Response,
     next: NextFunction
   ): Promise<void>;
+  updateUserInfo(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void>;
 }
 
 export interface IUserValidation {
   changeProfileImgInput(data: any): Promise<MulterFile>;
+  updateUserInfo(data: any, user: UserAttributes): Promise<ChangeInfoInput>;
+}
+
+export interface ChangeInfoInput {
+  username: string;
+  bio: string;
 }

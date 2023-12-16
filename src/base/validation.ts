@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import AppError from "./error";
+import GlobalConstant from "../constant/global";
 
 export default abstract class BaseValidation {
   protected async validate<T>(schema: yup.Schema, data: any): Promise<T> {
@@ -49,7 +50,7 @@ export default abstract class BaseValidation {
   protected imageValidator = {
     fieldname: yup.string(),
     originalname: yup.string(),
-    filename:yup.string(),
+    filename: yup.string().transform((val, originalVal) => {}),
     encoding: yup.string(),
     buffer: yup.mixed(),
     mimetype: yup
@@ -62,4 +63,7 @@ export default abstract class BaseValidation {
       .number()
       .max(10000000, "Maksimum ukuran lampiran foto adalah 10MB"),
   };
+
+  protected sanitizeForbiddenChar = (val: string, originalVal: string) =>
+    originalVal.replace(GlobalConstant.forbiddenChar, "");
 }
