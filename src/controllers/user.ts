@@ -57,7 +57,7 @@ export default new (class Controller implements UserController {
       const dirr = `${GlobalConstant.uploadDirr}/${filename}`;
       const { fileId, url } = await uploadImg({
         fileName: filename,
-        folder: "profile",
+        folder: "background",
         path: readFileSync(dirr),
       });
 
