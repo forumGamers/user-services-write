@@ -1,6 +1,6 @@
 export default abstract class GlobalConstant {
-  static baseUrl = "/api/v1";
-  static responseName: Record<number, string> = {
+  public static baseUrl = "/api/v1";
+  public static responseName: Record<number, string> = {
     100: "Continue",
     101: "Switching Protocols",
     102: "Processing",
@@ -63,4 +63,38 @@ export default abstract class GlobalConstant {
     510: "Not Extended",
     511: "Network Authentication Required",
   };
+
+  public static statusForbidden: { message: string; statusCode: number } = {
+    message: "Forbidden",
+    statusCode: 403,
+  };
+
+  public static statusInvalidToken: { message: string; statusCode: number } = {
+    message: "Invalid Token",
+    statusCode: 401,
+  };
+
+  public static statusDataNotFound: { message: string; statusCode: number } = {
+    message: "Data Not Found",
+    statusCode: 404,
+  };
+
+  public static statusBadRequest = (
+    message = "Bad Request"
+  ): { message: string; statusCode: number } => ({
+    message,
+    statusCode: 400,
+  });
+
+  public static statusConflict: { message: string; statusCode: number } = {
+    message: "Conflict",
+    statusCode: 409,
+  };
+
+  public static statusUnauthorized: { message: string; statusCode: number } = {
+    message: "unauthorized",
+    statusCode: 401,
+  };
+
+  public static uploadDirr = "./uploads";
 }

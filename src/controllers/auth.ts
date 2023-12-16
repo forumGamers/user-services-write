@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import validator from "../validations/auth";
 import { Db, User, Token } from "../models";
 import response from "../middlewares/response";
@@ -12,13 +12,10 @@ import { AdminAttributes } from "../interfaces/admin";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
 import { v4 } from "uuid";
 import Helper from "../helpers";
+import type { AuthController } from "../interfaces/auth";
 
-export default class Controller {
-  public static async register(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+export default new (class Controller implements AuthController {
+  public async register(req: Request, res: Response, next: NextFunction) {
     try {
       const {
         fullname,
@@ -57,13 +54,15 @@ export default class Controller {
         following: [],
       });
 
+      (user as any).password = undefined;
+
       response({ code: 201, res, message: "Success Register", data: user });
     } catch (err) {
       next(err);
     }
   }
 
-  public static async login(req: Request, res: Response, next: NextFunction) {
+  public async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, as } = await validator.loginValidate(req.body);
 
@@ -106,11 +105,7 @@ export default class Controller {
     }
   }
 
-  public static async googleLogin(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  public async googleLogin(req: Request, res: Response, next: NextFunction) {
     try {
       const { google_token } = req.headers;
 
@@ -191,7 +186,7 @@ export default class Controller {
     }
   }
 
-  public static async generateForgetPasswordToken(
+  public async generateForgetPasswordToken(
     req: Request,
     res: Response,
     next: NextFunction
@@ -235,7 +230,7 @@ export default class Controller {
     }
   }
 
-  public static async changeForgetPass(
+  public async changeForgetPass(
     req: Request,
     res: Response,
     next: NextFunction
@@ -283,11 +278,7 @@ export default class Controller {
     }
   }
 
-  public static async verifyUser(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  public async verifyUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { token = "" } = req.query;
 
@@ -326,4 +317,4 @@ export default class Controller {
       next(err);
     }
   }
-}
+})();

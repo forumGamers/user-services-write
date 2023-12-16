@@ -37,14 +37,29 @@ export default abstract class BaseValidation {
     ];
     const errors = [];
 
-    for (const requirement of requirements) {
-      if (!requirement.regex.test(password)) {
+    for (const requirement of requirements)
+      if (!requirement.regex.test(password))
         errors.push(new Error(requirement.message).message);
-      }
-    }
 
     if (errors.length) throw { errors };
 
     return true;
   }
+
+  protected imageValidator = {
+    fieldname: yup.string(),
+    originalname: yup.string(),
+    filename:yup.string(),
+    encoding: yup.string(),
+    buffer: yup.mixed(),
+    mimetype: yup
+      .string()
+      .oneOf(
+        ["image/jpeg", "image/jpg", "image/png"],
+        "image must be oneof .jpg .jpeg .png"
+      ),
+    size: yup
+      .number()
+      .max(10000000, "Maksimum ukuran lampiran foto adalah 10MB"),
+  };
 }

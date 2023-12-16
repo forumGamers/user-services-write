@@ -1,3 +1,6 @@
+import type { NextFunction, Request, Response } from "express";
+import type { MulterFile } from ".";
+
 export interface UserAttributes {
   fullname: string;
   username: string;
@@ -42,4 +45,16 @@ export interface UserBroker {
   role?: "Supervisor" | "Manager" | "Staff" | null;
   following: string[];
   followers: string[];
+}
+
+export interface UserController {
+  updateProfileImg(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void>;
+}
+
+export interface IUserValidation {
+  changeProfileImgInput(data: any): Promise<MulterFile>;
 }

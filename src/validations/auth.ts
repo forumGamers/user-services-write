@@ -1,15 +1,18 @@
 import BaseValidation from "../base/validation";
 import * as yup from "yup";
 import {
+  IAuthValidation,
   LoginInput,
   RegisterInput,
   ResetPasswordInput,
 } from "../interfaces/auth";
 
-class AuthValidation extends BaseValidation {
+export default new (class AuthValidation extends BaseValidation
+  implements IAuthValidation {
   constructor() {
     super();
   }
+
   public async registerValidation(data: any) {
     return await this.validate<RegisterInput>(
       yup
@@ -88,6 +91,4 @@ class AuthValidation extends BaseValidation {
       data
     );
   }
-}
-
-export default new AuthValidation();
+})();

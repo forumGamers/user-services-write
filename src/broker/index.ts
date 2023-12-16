@@ -1,7 +1,8 @@
-import { Connection, Channel, connect } from "amqplib";
+import { type Connection,type Channel, connect } from "amqplib";
 import AppError from "../base/error";
-import { UserBroker } from "../interfaces/user";
-import { TokenBroker } from "../interfaces/token";
+import type { UserBroker } from "../interfaces/user";
+import type { TokenBroker } from "../interfaces/token";
+import type { userQueueInput } from "../interfaces/broker";
 
 class RabbitMQProperty {
   protected connection!: Connection;
@@ -12,10 +13,12 @@ class RabbitMQProperty {
   protected newUserQueue = "New-User-Queue";
   protected updateUserQueue = "Update-User-Queue";
   protected loginUserQueue = "Login-User-Queue";
+  protected userChangeProfile = "User-Change-Profile";
   protected userQueues: string[] = [
     this.newUserQueue,
     this.loginUserQueue,
     this.updateUserQueue,
+    this.userChangeProfile
   ];
 
   protected userExchange = "User-Exchanges";
@@ -49,7 +52,7 @@ class RabbitMQProperty {
         let queues: string[] = [];
         switch (exchange) {
           case this.userExchange:
-            queues = [this.newUserQueue, this.updateUserQueue];
+            queues = [this.newUserQueue, this.updateUserQueue,this.userChangeProfile];
             break;
           default:
             break;
@@ -81,6 +84,10 @@ class RabbitMQProperty {
       this.updateUserQueue,
       Buffer.from(JSON.stringify(user))
     );
+  }
+
+  public async sendMessageToQueue(queue: userQueueInput, data: object) {
+    return this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
   }
 }
 
