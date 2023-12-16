@@ -42,7 +42,42 @@ export default new (class Controller implements UserController {
 
       response({ res, code: 200, message: "success" });
     } catch (err) {
-      console.log(err);
+      next(err);
+    }
+  }
+  public async updateBackgroundImg(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { filename } = await userValidation.changeProfileImgInput(req.file);
+      const { UUID, backgroundId } = req.user;
+
+      const dirr = `${GlobalConstant.uploadDirr}/${filename}`;
+      const { fileId, url } = await uploadImg({
+        fileName: filename,
+        folder: "profile",
+        path: readFileSync(dirr),
+      });
+
+      unlinkSync(dirr);
+
+      await User.update(
+        { backgroundUrl: url, backgroundId: fileId },
+        { where: { UUID } }
+      );
+
+      if (backgroundId) await deleteImg(backgroundId);
+
+      broker.sendMessageToQueue("User-Change-Background", {
+        id: UUID,
+        background_id: fileId,
+        background_url: url,
+      });
+
+      response({ res, code: 200, message: "success" });
+    } catch (err) {
       next(err);
     }
   }

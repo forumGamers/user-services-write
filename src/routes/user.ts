@@ -7,10 +7,11 @@ export default new (class Routes extends BaseRoutes {
   routes(): void {
     this.router
       .use(authentication)
+      .post("/profile-img", multer.single("image"), controller.updateProfileImg)
       .post(
-        "/profile-img",
+        "/background-img",
         multer.single("image"),
-        controller.updateProfileImg
+        controller.updateBackgroundImg
       );
   }
 })().router;

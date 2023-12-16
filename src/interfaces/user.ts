@@ -53,6 +53,11 @@ export interface UserController {
     res: Response,
     next: NextFunction
   ): Promise<void>;
+  updateBackgroundImg(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void>;
 }
 
 export interface IUserValidation {

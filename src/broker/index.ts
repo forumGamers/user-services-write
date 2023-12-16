@@ -14,11 +14,13 @@ class RabbitMQProperty {
   protected updateUserQueue = "Update-User-Queue";
   protected loginUserQueue = "Login-User-Queue";
   protected userChangeProfile = "User-Change-Profile";
+  protected userChangeBackground = "User-Change-Background"
   protected userQueues: string[] = [
     this.newUserQueue,
     this.loginUserQueue,
     this.updateUserQueue,
-    this.userChangeProfile
+    this.userChangeProfile,
+    this.userChangeBackground
   ];
 
   protected userExchange = "User-Exchanges";
@@ -52,7 +54,7 @@ class RabbitMQProperty {
         let queues: string[] = [];
         switch (exchange) {
           case this.userExchange:
-            queues = [this.newUserQueue, this.updateUserQueue,this.userChangeProfile];
+            queues = this.userQueues
             break;
           default:
             break;
